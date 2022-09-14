@@ -5,8 +5,103 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" integrity="sha512-CNgIRecGo7nphbeZ04Sc13ka07paqdeTu0WR1IM4kNcpmBAUSHSQX0FslNhTDadL4O5SAGapGt4FodqL8My0mA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <style>
+        *{margin: 0; padding: 0;}
+        nav{
+            background-color: rgb(174, 130, 166);
+            padding: 10px;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+        }
+
+        main{
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            margin-top: 5rem;
+        }
+        
+        .inner{
+            display: flex;
+            flex-direction: column;
+            align-content: center;
+            margin: 0 auto;
+            margin-top: 2rem;
+            width: 50%;
+        }
+
+        #generate-form{
+            display: flex; flex-direction: column;
+        }
+
+        .inner input{
+            margin: 1rem;
+        }
+
+        input[type=url]{
+            padding: 5px;
+        }
+        button{
+            padding: 5px;
+            font-size: 20px;
+        }
+
+        select{
+            margin-top: 10px;
+        }
+
+
+        
+
+    </style>
 </head>
 <body>
+    <nav>
+        <h2>QRCode Generator</h2>
+    </nav>
+
+    <main>
+        <div class="top">
+            <h1>QRCode Generator</h1>
+            <h2>Enter your url bellow and you'll get a QRCode</h2>
+            <div class="inner">
+                <form id="generate-form">
+                    <input type="url" id="url">
+                    <button>Generate</button>
+                    <select id="size">
+                        <option value="100">100 x 100</option>
+                        <option value="200">200 x 200</option>
+                        <option value="300">300 x 300</option>
+                        <option value="400" selected>400 x 400</option>
+                        <option value="500">500 x 500</option>
+                        <option value="600">600 x 600</option>
+                    </select>
+                </form>
+            </div>
+        </div>
+
+        <section>
+            <!-- output -->
+            <div id="qrcode"></div>
+        </section>
+    </main>
+
+    <script>
+        const form = document.getElementById('generate-form');
+        const qr = document.getElementById('qrcode')
+
+        const onGenerate = (e) => {
+            e.preventDefault();
+            const url = document.getElementById('url').value;
+            const size = document.getElementById('size').value;
+            console.log(url, size)
+        }
+
+        form.addEventListener('submit', onGenerate);
+
+    </script>
     
 </body>
 </html>
