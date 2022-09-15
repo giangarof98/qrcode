@@ -18,10 +18,30 @@
 
         main{
             display: flex;
-            flex-direction: row;
-            justify-content: center;
-            margin-top: 5rem;
+            flex-direction: column;
+            align-content: center;
+            margin-top: 2rem;
         }
+
+        section{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .top{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #qrcode{
+            display: flex;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        #gen{margin-top: 2rem;}
         
         .inner{
             display: flex;
@@ -29,28 +49,29 @@
             align-content: center;
             margin: 0 auto;
             margin-top: 2rem;
-            width: 50%;
+            width: 100%;
+            
         }
 
         #generate-form{
-            display: flex; flex-direction: column;
+            display: flex; flex-direction: column; align-items: center;
+            width: 100%;
         }
 
-        .inner input{
-            margin: 1rem;
-        }
+        .inner input{margin: 1rem;}
 
         input[type=url]{
             padding: 5px;
+            width: 50%;
         }
         button{
             padding: 5px;
             font-size: 20px;
         }
 
-        select{
-            margin-top: 10px;
-        }
+        select{margin-top: 10px;}
+
+        #loading{display: none;}
 
 
         
@@ -66,6 +87,7 @@
         <div class="top">
             <h1>QRCode Generator</h1>
             <h2>Enter your url bellow and you'll get a QRCode</h2>
+            <p id="loading">Loading... Please wait</p>
             <div class="inner">
                 <form id="generate-form">
                     <input type="url" id="url">
@@ -84,6 +106,7 @@
 
         <section>
             <!-- output -->
+            <div id="gen"></div>
             <div id="qrcode"></div>
         </section>
     </main>
@@ -94,9 +117,61 @@
 
         const onGenerate = (e) => {
             e.preventDefault();
+            clearUI()
             const url = document.getElementById('url').value;
             const size = document.getElementById('size').value;
-            console.log(url, size)
+            
+            if(url === ''){
+                alert('please enter a URL')
+            } else {
+                showLoad()
+                setTimeout(() => {
+                    hideLoad()
+                    generateQR(url,size)
+                    setTimeout(() => {
+                        const saveUrl = qr.querySelector('img').src;
+                        saveBtn(saveUrl)
+                    }, 1000)
+                }, 1000)
+                
+            }
+        }
+
+        //generate qr code
+        const generateQR = (url, size) => {
+            const qrcode = new QRCode('qrcode', {
+                text: url,
+                width: size,
+                height: size,
+            })
+        }
+
+        //show loading msg
+        const showLoad = () => {
+            document.getElementById('loading').style.display = 'block'
+        }
+        //hide loading msg
+        const hideLoad = () => {
+            document.getElementById('loading').style.display = 'none'
+        }
+
+        //clear previous qrcode
+        const clearUI = () => {
+            qr.innerHTML =''
+            const btn = document.getElementById('save-link');
+            if(btn){
+                btn.remove()
+            }
+        }
+        
+        const saveBtn = (saveUrl) => {
+            const link = document.createElement('a');
+            link.id = 'save-link';
+            link.classList = '';
+            link.href = saveUrl;
+            link.download = 'qrcode';
+            link.innerHTML = 'Download Image'
+            document.getElementById('gen').appendChild(link)
         }
 
         form.addEventListener('submit', onGenerate);
